@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Post\StoreRequest;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -25,7 +27,13 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('dashboard.post.create');
+        /* Consulta a la base de datos*/
+        /*$categorie = Category::get();*/
+        $categorie = Category::pluck('id','title');
+        /* le enviaremos la consulta atravez del return view con compact(este contiene toda la consulta
+        titulo, categoria, slug, id, etc.*/
+        echo view('dashboard.post.create', compact('categorie'));
+        
     }
 
     /**
@@ -34,13 +42,17 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
        /* dd(request("title"));*/
-        echo request("slug");
-        echo $request->input("content");
-        /*dd($request->all());*/
-
+       /* echo request("slug");
+        /*echo $request->input("content");
+        dd($request->all());
+        */
+        $data = array_merge($request->all(),['image'=>'']);
+        /*dd($data);*/
+        Post::create($data);
+        
     }
 
     /**
