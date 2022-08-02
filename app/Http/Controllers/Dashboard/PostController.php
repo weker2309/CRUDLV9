@@ -49,6 +49,7 @@ class PostController extends Controller
         /*echo $request->input("content");
         dd($request->all());
         */
+       // $validated = $request->validate(StoreRequest::myRules());
         $data = array_merge($request->all(),['image'=>'']);
         /*dd($data);*/
         Post::create($data);
