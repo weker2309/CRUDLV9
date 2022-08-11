@@ -93,7 +93,7 @@ class PostController extends Controller
      */
     public function update(PutRequest $request, Post $post)
     {
-       dd($request->validate());
+        dd($request->validate());
         $post->update($request->validate());
     }
 
