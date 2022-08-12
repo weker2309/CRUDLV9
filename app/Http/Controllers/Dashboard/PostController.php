@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Requests\Post\PutRequest;
+
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Post\PutRequest;
 use App\Http\Requests\Post\StoreRequest;
+
 
 use App\Models\Category;
 use App\Models\Post;
@@ -19,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::paginate(2);
+        $post = Post::paginate(4);
         /*pasar la consulta a la base de datos
         return view('dashboard.post.index', ["post"=>$post] );*/
         return view('dashboard.post.index', compact('post') );
@@ -37,7 +39,8 @@ class PostController extends Controller
         $categorie = Category::pluck('id','title');
         /* le enviaremos la consulta atravez del return view con compact(este contiene toda la consulta
         titulo, categoria, slug, id, etc.*/
-        echo view('dashboard.post.create', compact('categorie'));
+        $post = new Post();
+        echo view('dashboard.post.create', compact('categorie','post'));
         
     }
 
@@ -58,7 +61,7 @@ class PostController extends Controller
         $data = array_merge($request->all(),['image'=>'']);
         /*dd($data);*/
         Post::create($data);
-        
+        return to_route("post.index");
     }
 
     /**
@@ -69,7 +72,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        echo "show";
+        return view("dashboard.post.show", compact('post'));
     }
 
     /**
@@ -81,7 +84,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categorie = Category::pluck('id','title');
-        echo view('dashboard.post.edit', compact('categorie','post'));
+        return view('dashboard.post.edit', compact('categorie','post'));
     }
 
     /**
@@ -93,8 +96,9 @@ class PostController extends Controller
      */
     public function update(PutRequest $request, Post $post)
     {
-        dd($request->validate());
-        $post->update($request->validate());
+        //dd($request->validated());
+        $post->update($request->validated());
+        return to_route("post.update");
     }
 
     /**
@@ -105,6 +109,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        echo "destroy";
+        $post->delete();
+        return to_route("post.index");
     }
 }
