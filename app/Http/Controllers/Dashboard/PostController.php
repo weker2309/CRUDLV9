@@ -21,6 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
+       
         $post = Post::paginate(4);
         /*pasar la consulta a la base de datos
         return view('dashboard.post.index', ["post"=>$post] );*/
@@ -96,9 +97,21 @@ class PostController extends Controller
      */
     public function update(PutRequest $request, Post $post)
     {
-        //dd($request->validated());
-        $post->update($request->validated());
-        return to_route("post.update");
+        $data = $request->validated();
+        //$post->update($request->validated());
+        if( isset($data["image"])){
+            //agregamos un nombre personalizado con la validación de que sea una imagen cargada.
+            $data["image"]= $filename = time().".".$data["image"]->extension();
+            /*ahora enviaremos la imagen temporal especificando el nombre de la carpeta y el archivo */
+            $request->image->move(public_path("image/almacenamiento"),$filename);
+
+        }
+        /* con esta linea de codigo enviamos los cambios a la base de datos */
+        $post->update($data);
+        /* para poder enviar un mensaje de confirmación con una varliable de sesión pero con la opción de with
+        es mas facil y no validamos nada.
+        $request->session()->flash('status',"Registro Actualizado");*/
+        return to_route("post.index")->with('status',"Registro Actualizado");
     }
 
     /**

@@ -17,7 +17,7 @@
         <tr>
             <td>{{$p->id}}</td>
             <td>{{$p->title}}</td>
-            <td>{{$p->category_id}}</td>
+            <td>{{$p->category->title }}</td>
             <td>{{$p->posted}}</td>
             <td>
                 <a href="{{ route("post.edit",$p->id )}}">Editar</a>

@@ -27,4 +27,10 @@
     <option value="yes" {{ old("posted","$post->posted") == "yes" ? "selected" : ""}}>Yes</option>
 </select>
 <br />
+{{-- En esta parte habilitamos el input de imagen si esta definido o no task con isset--}}
+@if (isset($task) && $task== "edit")
+    <label>Image</label>
+    <input type="file" name="image"> 
+@endif
+<br />
 <button type="submit">Régistrarme</button>

@@ -5,9 +5,10 @@
 
     @include('dashboard.fragment._errors-front')
 
-        <form action="{{ route('post.update',$post->id) }}" method="post">
+        <form action="{{ route('post.update',$post->id) }}" method="post" enctype="multipart/form-data">
             @method("PUT")
-            
-            @include('dashboard.post._form')
+
+            @include('dashboard.post._form',["task" => "edit"])
+
         </form>
 @endsection
